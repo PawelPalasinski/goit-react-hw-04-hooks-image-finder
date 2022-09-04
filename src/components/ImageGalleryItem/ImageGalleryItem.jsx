@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styles from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem({ articles, onImage }) {
+const ImageGalleryItem = ({ articles, onImage }) => {
   return (
     <>
       {articles.map(({ id, webformatURL, largeImageURL, tags }) => (

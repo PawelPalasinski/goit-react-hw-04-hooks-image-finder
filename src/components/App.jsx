@@ -20,7 +20,7 @@ class App extends Component {
     tags: '',
   };
 
-  toggleModal = (imageURL, tag, id) => {
+  toggleModal = (imageURL, tag) => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
       largeImageURL: imageURL,
