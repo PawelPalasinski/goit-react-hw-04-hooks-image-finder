@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Notiflix from 'notiflix';
 import { BASE_URL, API_KEY, SEARCH_PARAMS } from './utils/utils';
@@ -9,87 +10,80 @@ import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 import Modal from './Modal/Modal';
 import SpinnerLoader from './Loader/Loader';
 
-class App extends Component {
-  state = {
-    hits: [],
-    name: '',
-    page: 1,
-    showModal: false,
-    loading: false,
-    largeImageURL: '',
-    tags: '',
+const App = () => {
+  const [hits, setHits] = useState([]);
+  const [name, setName] = useState('');
+  const [page, setPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [largeImageURL, setLargeImageURL] = useState('');
+  const [tags, setTags] = useState('');
+
+  const toggleModal = (imageURL, tag) => {
+    setShowModal(!showModal);
+    setLargeImageURL(imageURL);
+    setTags(tag);
   };
 
-  toggleModal = (imageURL, tag) => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-      largeImageURL: imageURL,
-      tags: tag,
-    }));
-  };
-
-  getValue = ({ name, page }) => {
-    this.setState({ loading: true });
-    try {
-      axios
-        .get(
-          `${BASE_URL}?key=${API_KEY}&q=${name}&page=${page}&${SEARCH_PARAMS}`
-        )
+  useEffect(() => {
+    setTimeout(() => {
+      axios(
+        `${BASE_URL}?key=${API_KEY}&q=${name}&page=${page}&${SEARCH_PARAMS}`
+      )
         .then(response => {
           if (!response.data.hits.length) {
             Notiflix.Notify.failure('No images found!');
-          } else if (name === this.state.name) {
-            this.setState(state => ({
-              hits: [...state.hits, ...response.data.hits],
-              name: name,
-              page: state.page + 1,
-            }));
           } else {
-            this.setState(state => ({
-              hits: response.data.hits,
-              name: name,
-              page: state.page + 1,
-            }));
+            console.log('useEffect');
+            console.log('Name:' + name);
+            setHits(response.data.hits);
           }
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      this.setState({
-        loading: false,
-      });
-    }
+    }, 2000);
+  }, []);
+
+  const loadMore = () => {
+    console.log('loadMore');
+    setPage(page + 1);
   };
 
-  loadMore = () => {
-    this.getValue(this.state);
+  const getValue = () => {
+    console.log('test');
   };
 
-  render() {
-    const { hits, showModal, loading, largeImageURL, tags } = this.state;
+  // useEffect(() => {
+  //   if (loading) {
+  //     setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
+  //   }
+  // }, [loading]);
 
-    return (
-      <div>
-        <Searchbar onSubmitHandler={this.getValue} />
+  return (
+    <div>
+      <Searchbar onSubmitHandler={getValue} />
 
-        {loading && <SpinnerLoader />}
+      {loading && <SpinnerLoader />}
 
-        {hits && (
-          <ImageGallery>
-            <ImageGalleryItem articles={hits} onImage={this.toggleModal} />
-          </ImageGallery>
-        )}
+      {hits && (
+        <ImageGallery>
+          <ImageGalleryItem articles={hits} onImage={() => toggleModal} />
+        </ImageGallery>
+      )}
 
-        {showModal && (
-          <Modal onClose={this.toggleModal} url={largeImageURL} alt={tags} />
-        )}
+      {showModal && (
+        <Modal onClose={() => toggleModal} url={largeImageURL} alt={tags} />
+      )}
 
-        {hits.length > 0 && (
-          <LoadMoreBtn onButtonClick={() => this.loadMore()} />
-        )}
-      </div>
-    );
-  }
-}
+      {hits.length > 0 && <LoadMoreBtn onButtonClick={() => loadMore} />}
+    </div>
+  );
+};
 
 export default App;
