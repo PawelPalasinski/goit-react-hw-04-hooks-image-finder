@@ -1,11 +1,9 @@
 
 import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root');
 
-const Modal = ({ onCloseModal, children }) => {
+const Modal = ({ onCloseModal, dataImg }) => {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
@@ -26,54 +24,15 @@ const Modal = ({ onCloseModal, children }) => {
     }
   };
 
-  return createPortal(
+  const { src, alt } = dataImg;
+
+  return (
     <div className={styles.Overlay} onClick={handleBackdropClick}>
-      <div className={styles.Modal}>{children}</div>
-    </div>,
-    modalRoot,
+      <div className={styles.Modal}>
+        <img src={src} alt={alt} />
+      </div>
+    </div>
   );
 };
-
-
-// !
-
-// class Modal extends Component {
-//   componentDidMount() {
-//     window.addEventListener('keydown', this.handleKeyDown);
-//   }
-
-//   componentWillUnmount() {
-//     window.removeEventListener('keydown', this.handleKeyDown);
-//   }
-
-//   handleKeyDown = e => {
-//     if (e.code === 'Escape') {
-//       this.props.onClose();
-//     }
-//   };
-
-//   handleBackdpropClick = e => {
-//     if (e.currentTarget === e.target) {
-//       this.props.onClose();
-//     }
-//   };
-
-//   render() {
-//     const { url, alt } = this.props;
-//     return (
-//       <div className={styles.Overlay} onClick={this.handleBackdpropClick}>
-//         <div className={styles.Modal}>
-//           <img src={url} alt={alt} />
-//           <button
-//             className={styles.CloseBtn}
-//             onClick={this.handleBackdpropClick}
-//           >
-//             ⛌
-//           </button>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
 
 export default Modal;

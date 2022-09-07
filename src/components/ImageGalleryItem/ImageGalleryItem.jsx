@@ -1,12 +1,12 @@
 import styles from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ webformatURL, onToggleModal, largeImgURL }) => {
+const ImageGalleryItem = ({ webformatURL, toggleModal, largeImageURL, tags }) => {
   return (
     <li
       className={styles.ImageGalleryItem}
-      onClick={() => onToggleModal(largeImgURL)}
+      onClick={() => toggleModal(largeImageURL, tags)}
     >
-      <img src={webformatURL} alt="" className={styles.ImageGalleryItemImage} />
+      <img src={webformatURL}  alt={tags} className={styles.ImageGalleryItemImage} />
     </li>
   );
 };

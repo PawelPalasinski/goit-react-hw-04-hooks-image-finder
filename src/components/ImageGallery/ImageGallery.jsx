@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import ImageGalleryItem from './../ImageGalleryItem/ImageGalleryItem'
 import LoadMoreBtn from './../LoadMoreBtn/LoadMoreBtn';
@@ -8,23 +8,25 @@ import styles from './ImageGallery.module.css';
 
 const ImageGallery = ({
   hits,
-  fetchHits,
+  fetchData,
   loading, }) => {
   
   const [modal, setModal] = useState(false);
-  const [largeImgURL, setLargeImgURL] = useState(null);
+  const [largeImgURL, setLargeImageURL] = useState(null);
 
   const toggleModal = () => {
     setModal(prevState => !prevState);
-    setLargeImgURL(null);
+    setLargeImageURL(null);
   };
 
-  const handleModalImg = (url) => {
+  const handleModalImg = url => {
     toggleModal();
-    setLargeImgURL(url);
+    setLargeImageURL(url);
   };
 
   const showButton = hits.length > 0;
+
+  console.log('ImgGalery: ' + hits.length);
 
   return (
     <>
@@ -34,17 +36,18 @@ const ImageGallery = ({
           <ImageGalleryItem
             key={id}
             webformatURL={webformatURL}
-            onToggleModal={handleModalImg}
-            largeImageURL={largeImgURL}
+            toggleModal={handleModalImg}
+            largeImgURL={largeImgURL}
+            dataImg={hits}
           />
         ))}
       </ul>
 
-      {showButton && <LoadMoreBtn onClick={fetchHits} isLoading={loading} />}
+      {showButton && <LoadMoreBtn onClick={fetchData} loading={loading} />}
 
       {modal && (
         <Modal onCloseModal={toggleModal}>
-          <img src={largeImgURL} alt="" />
+          <img src={largeImgURL} alt='' />
         </Modal>
       )}
     </>

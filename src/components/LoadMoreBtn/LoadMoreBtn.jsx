@@ -5,17 +5,22 @@ import { InfinitySpin } from 'react-loader-spinner';
 import styles from './LoadMoreBtn.module.css';
 
 const LoadMoreBtn = ({ onClick, loading }) => {
+
+  console.log('BTN: ' + onClick + loading);
+
   return (
-    <button className={styles.Button} type="button" onClick={onClick}>
+    <div className={styles.BtnContainer}>
+      <button className={styles.Button} type="button" onClick={onClick}>
       <InfinitySpin
-        color="#4fa94d"
+        color="#000"
         className={styles.loader}
         height={20}
         width={20}
         visible={loading}
       />
       {loading ? '' : 'Load more'}
-    </button>
+      </button>
+      </div> 
   );
 };
 

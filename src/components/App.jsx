@@ -10,12 +10,12 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     if (name) {
+      console.log('effect');
       fetchData();
     }
-  });
+  }, [name]);
 
   const handleSubmit = name => {
     setName(name);
@@ -28,6 +28,8 @@ const App = () => {
       name,
       page,
     };
+
+    console.log('fetchData z App');
 
     setLoading(true);
 
@@ -46,13 +48,13 @@ const App = () => {
 
   return (
     <div>
-      <Searchbar onSubmit={handleSubmit}/>
+      <Searchbar onSubmit={handleSubmit} />
       <ImageGallery
         name={name}
         hits={hits}
         page={page}
         loading={loading}
-        fetchHits={fetchHits}
+        fetchData={fetchData}
       />
     </div>
   );
