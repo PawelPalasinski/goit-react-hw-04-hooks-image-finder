@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Notiflix from 'notiflix';
 import styles from './Searchbar.module.css';
@@ -5,11 +6,8 @@ import styles from './Searchbar.module.css';
 const Searchbar = ({ onSubmit }) => {
   const [name, setValue] = useState('');
 
-
-
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('searchbar test');
     if (name.trim() === '') {
       Notiflix.Notify.failure(
         'You have to enter something first to search for images!'
@@ -19,7 +17,6 @@ const Searchbar = ({ onSubmit }) => {
     onSubmit(name);
     reset();
   };
-
 
   const handleChange = e => {
     setValue(e.target.value);
@@ -58,6 +55,10 @@ const Searchbar = ({ onSubmit }) => {
       </form>
     </header>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
 };
 
 export default Searchbar;

@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Spinner from './Loader/Loader';
 import fetchHits from './services/api';
 
 const App = () => {
@@ -12,10 +13,16 @@ const App = () => {
 
   useEffect(() => {
     if (name) {
-      console.log('effect');
       fetchData();
     }
   }, [name]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  });
 
   const handleSubmit = name => {
     setName(name);
@@ -23,13 +30,12 @@ const App = () => {
     setPage(1);
   };
 
+
   const fetchData = () => {
     const options = {
       name,
       page,
     };
-
-    console.log('fetchData z App');
 
     setLoading(true);
 
@@ -41,21 +47,19 @@ const App = () => {
       .catch(error => {
         console.error('Error fetching data: ', error);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
   return (
     <div>
       <Searchbar onSubmit={handleSubmit} />
-      <ImageGallery
+      {loading ? <Spinner /> : <ImageGallery
         name={name}
         hits={hits}
         page={page}
-        loading={loading}
         fetchData={fetchData}
-      />
+      />}
+
     </div>
   );
 };
