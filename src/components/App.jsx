@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Searchbar from './Searchbar/Searchbar';
@@ -5,11 +6,12 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Spinner from './Loader/Loader';
 import fetchHits from './services/api';
 
-const App = () => {
+function App() {
   const [hits, setHits] = useState([]);
   const [name, setName] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     if (name) {
@@ -17,10 +19,11 @@ const App = () => {
     }
   }, [name]);
 
+
   useEffect(() => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
+      behavior: 'smooth'
     });
   });
 
@@ -34,7 +37,7 @@ const App = () => {
   const fetchData = () => {
     const options = {
       name,
-      page,
+      page
     };
 
     setLoading(true);
@@ -57,11 +60,10 @@ const App = () => {
         name={name}
         hits={hits}
         page={page}
-        fetchData={fetchData}
-      />}
+        fetchData={fetchData} />}
 
     </div>
   );
-};
+}
 
 export default App;
